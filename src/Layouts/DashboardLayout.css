@@ -1,0 +1,10 @@
+/* src/layouts/DashboardLayout.css */
+.dashboard-layout {
+  display: flex;
+}
+
+.content-area {
+  flex-grow: 1; /* This makes the content area take up all remaining space */
+  height: 100vh;
+  overflow-y: auto; /* Adds a scrollbar if the content is taller than the screen */
+}

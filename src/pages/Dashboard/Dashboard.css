@@ -1,0 +1,11 @@
+/* src/pages/Dashboard/Dashboard.css */
+.dashboard-main {
+  padding: 2rem;
+}
+
+.sensor-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}

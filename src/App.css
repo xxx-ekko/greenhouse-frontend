@@ -1,0 +1,108 @@
+/* General Body Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+/* Centering Container for Auth Pages */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* The Form "Card" */
+.form-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 500px;
+}
+
+.form-card h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #1c1e21;
+  font-size: 1.75rem;
+}
+
+/* Form Fields and Labels */
+.form-card div {
+  margin-bottom: 1rem;
+}
+
+.form-card label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-card input[type="email"],
+.form-card input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #dddfe2;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-card input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Button Styling */
+.form-card button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-card button:hover {
+  background-color: #0056b3;
+}
+
+/* Message Styling (for errors or success) */
+.form-card p {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+/* Keyframes define the steps of the animation */
+@keyframes shake {
+  10%, 90% {
+    transform: translateX(-1px);
+  }
+  20%, 80% {
+    transform: translateX(2px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-4px);
+  }
+  40%, 60% {
+    transform: translateX(4px);
+  }
+}
+
+/* A class we can add to our message to trigger the animation */
+.shake-error {
+  /* Apply the 'shake' animation */
+  animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+}

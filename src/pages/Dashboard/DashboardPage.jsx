@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api/api";
+import axios from "axios";
 import Header from "../../components/Header/Header";
 import SensorCard from "../../components/SensorCard/SensorCard";
 

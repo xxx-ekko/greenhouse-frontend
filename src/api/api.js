@@ -1,7 +1,8 @@
+//frontend/src/api/api.js
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/api', // The base URL for all our backend requests
+  baseURL: 'api/', // The base URL for all our backend requests
 });
 
 // This is an "interceptor". It's a function that runs BEFORE every single request.

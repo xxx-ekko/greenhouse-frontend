@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'api/', // The base URL for all our backend requests
+  baseURL: '/api', // The base URL for all our backend requests
 });
 
 // This is an "interceptor". It's a function that runs BEFORE every single request.
@@ -24,8 +24,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response, // If the response is successful (2xx status), just pass it through
   (error) => {
-    // If the server responds with a 401 (Unauthorized) error...
-    if (error.response && error.response.status === 401) {
+    const { config, response } = error;
+    const originalRequest = config;
+    // If the server responds with a 401 (Unauthorized) error AND if the URL of the request was NOT from the login or register.
+    if (response && response.status === 401 && originalRequest.url !== '/auth/login' && originalRequest.url !== '/auth/register') {
       console.log('Session expired or invalid. Logging out.');
 
       // 1. Remove the expired token from storage

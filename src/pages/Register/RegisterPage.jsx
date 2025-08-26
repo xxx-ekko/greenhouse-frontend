@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/api";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ function RegisterPage() {
         navigate("/login");
       }, 1500);
     } catch (error) {
+      console.error("Erreur complète interceptée par Axios :", error);
       // Display error message from the backend
       const errorMessage =
         error.response?.data?.message || "Registration failed.";

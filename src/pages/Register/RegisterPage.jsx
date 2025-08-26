@@ -6,28 +6,37 @@ import { useNavigate } from "react-router-dom";
 function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState({
+    key: 0,
+    text: "",
+    isError: false,
+  });
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault(); // Prevent default form submission
     try {
       // Send registration request to the backend
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/register",
-        {
-          email,
-          password,
-        }
-      );
-      setMessage(response.data.message);
+      const response = await api.post("/auth/register", {
+        email,
+        password,
+      });
+
+      setFeedback({ key: 0, text: response.data.message, isError: false });
+
       // Redirect to login page after a short delay
       setTimeout(() => {
         navigate("/login");
       }, 1500);
     } catch (error) {
       // Display error message from the backend
-      setMessage(error.response.data.message || "Registration failed.");
+      const errorMessage =
+        error.response?.data?.message || "Registration failed.";
+      setFeedback((prev) => ({
+        key: prev.key + 1,
+        text: errorMessage,
+        isError: true,
+      }));
     }
   };
 
@@ -56,7 +65,15 @@ function RegisterPage() {
           </div>
           <button type="submit">Register</button>
         </form>
-        {message && <p>{message}</p>}
+        {feedback.text && (
+          <p
+            key={feedback.key}
+            className={feedback.isError ? "shake-error" : ""}
+            style={{ color: feedback.isError ? "#d93025" : "#28a745" }}
+          >
+            {feedback.text}
+          </p>
+        )}
       </div>
     </div>
   );

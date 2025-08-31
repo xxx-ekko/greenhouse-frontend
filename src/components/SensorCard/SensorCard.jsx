@@ -1,9 +1,42 @@
 // src/components/SensorCard/SensorCard.jsx
 import React, { useState, useEffect } from "react";
-import api from "../../api/api"; // Note the path is now one level deeper
+import api from "../../api/api";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css"; // Import the default styles
-import "./SensorCard.css"; // Import our custom styles
+import "react-circular-progressbar/dist/styles.css";
+import "./SensorCard.css";
+
+// Objet de Configuration pour nos jauges
+const gaugeConfig = {
+  temperature: {
+    label: "Air Temperature",
+    unit: "°C",
+    maxValue: 50,
+    color: "#ff6b6b",
+  },
+  humidity: {
+    label: "Air Humidity",
+    unit: "%",
+    maxValue: 100,
+    color: "#4d96ff",
+  },
+  moisture_raw: {
+    label: "Soil Moisture",
+    unit: "",
+    maxValue: 4095,
+    color: "#8c5a3e",
+  },
+  battery_level: {
+    label: "Battery Level",
+    unit: "",
+    maxValue: 4095,
+    color: "#8c5a3e",
+  },
+  // On peut ajouter d'autres types ici
+  default: { unit: "", maxValue: 100, color: "#cccccc" },
+};
+
+const getConfigForType = (type) =>
+  gaugeConfig[type] || { ...gaugeConfig.default, label: type };
 
 function SensorCard({ sensor }) {
   const [measurement, setMeasurement] = useState(null);
@@ -46,33 +79,43 @@ function SensorCard({ sensor }) {
       <div className="gauges-container">
         {loading ? (
           <p>Loading data...</p>
-        ) : measurement ? (
-          <>
-            <div className="gauge-wrapper">
-              <CircularProgressbar
-                value={measurement.temperature}
-                maxValue={50} // Set a realistic max temp
-                text={`${measurement.temperature}°C`}
-                styles={buildStyles({
-                  pathColor: "#ff6b6b",
-                  textColor: "#333",
-                })}
-              />
-              <span className="gauge-label">Temperature</span>
+        ) : measurement && measurement.data ? (
+          // On boucle sur les GROUPES de l'objet data ('dht11', 'soil')
+          Object.entries(measurement.data).map(([groupName, groupData]) => (
+            <div key={groupName} className="sensor-group">
+              <h4>{groupName}</h4>
+              {groupData.status === "ok" ? (
+                // Si le statut est OK, on boucle sur les mesures du groupe
+                Object.entries(groupData).map(([type, value]) => {
+                  if (type === "status") return null; // On n'affiche pas de jauge pour le statut
+
+                  const config = getConfigForType(type);
+                  const label = config.label || type.replace("_", " ");
+
+                  return (
+                    <div key={type} className="gauge-wrapper">
+                      <CircularProgressbar
+                        value={value || 0}
+                        maxValue={config.maxValue}
+                        text={`${value || "N/A"}${config.unit}`}
+                        styles={buildStyles({
+                          pathColor: config.color,
+                          textColor: "#333",
+                          trailColor: "#d6d6d6",
+                        })}
+                      />
+                      <span className="gauge-label">{label}</span>
+                    </div>
+                  );
+                })
+              ) : (
+                // Si le statut est 'error', on affiche un message d'erreur
+                <div className="sensor-error">
+                  <p>⚠️ Sensor Error</p>
+                </div>
+              )}
             </div>
-            <div className="gauge-wrapper">
-              <CircularProgressbar
-                value={measurement.humidity}
-                maxValue={100}
-                text={`${measurement.humidity}%`}
-                styles={buildStyles({
-                  pathColor: "#4d96ff",
-                  textColor: "#333",
-                })}
-              />
-              <span className="gauge-label">Humidity</span>
-            </div>
-          </>
+          ))
         ) : (
           <p>No data available for this sensor.</p>
         )}

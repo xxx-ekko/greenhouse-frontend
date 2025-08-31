@@ -59,10 +59,28 @@ function HistoryPage() {
     fetchMeasurements();
   }, [selectedSensorId]); // This effect depends on selectedSensorId.
 
+  // We create the table headers dynamically from the data!
+  const tableHeaders = [];
+  if (measurements.length > 0) {
+    const firstMeasurementData = measurements[0].data;
+    Object.keys(firstMeasurementData).forEach((key) => {
+      const value = firstMeasurementData[key];
+      if (typeof value === "object" && value !== null) {
+        // It's a group like ‘dht11’, we add its subkeys
+        Object.keys(value).forEach((subKey) => {
+          if (subKey !== "status") tableHeaders.push(subKey);
+        });
+      } else {
+        // It is a direct value like ‘battery_level’.
+        tableHeaders.push(key);
+      }
+    });
+  }
+  const uniqueHeaders = [...new Set(tableHeaders)]; // Pour éviter les doublons
+
   return (
     <div className="page-content">
       <h1>Data History</h1>
-
       <div className="history-controls">
         <label htmlFor="sensor-select">Select a Sensor:</label>
         <select
@@ -74,7 +92,7 @@ function HistoryPage() {
           <option value="">-- Please choose a sensor --</option>
           {sensors.map((sensor) => (
             <option key={sensor.id} value={sensor.id}>
-              {sensor.name} ({sensor.location || "No location"})
+              {sensor.name}
             </option>
           ))}
         </select>
@@ -90,16 +108,36 @@ function HistoryPage() {
             <thead>
               <tr>
                 <th>Timestamp</th>
-                <th>Temperature (°C)</th>
-                <th>Humidity (%)</th>
+                {uniqueHeaders.map((header) => (
+                  <th key={header}>{header.replace(/_/g, " ")}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {measurements.map((m) => (
                 <tr key={m.id}>
                   <td>{new Date(m.timestamp).toLocaleString()}</td>
-                  <td>{m.temperature}</td>
-                  <td>{m.humidity}</td>
+                  {uniqueHeaders.map((header) => {
+                    let cellValue = "N/A";
+                    // On cherche la valeur, qu'elle soit directe ou imbriquée
+                    if (
+                      m.data[header] !== undefined &&
+                      typeof m.data[header] !== "object"
+                    ) {
+                      cellValue = m.data[header];
+                    } else {
+                      for (const group of Object.values(m.data)) {
+                        if (
+                          typeof group === "object" &&
+                          group[header] !== undefined
+                        ) {
+                          cellValue = group[header];
+                          break;
+                        }
+                      }
+                    }
+                    return <td key={header}>{cellValue}</td>;
+                  })}
                 </tr>
               ))}
             </tbody>

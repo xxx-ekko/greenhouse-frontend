@@ -15,7 +15,7 @@ function LoginPage() {
   });
 
   const handleLogin = async (e) => {
-    debugger;
+    //debugger;
     e.preventDefault();
     try {
       // 1. Send login request to the backend

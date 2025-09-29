@@ -1,10 +1,96 @@
 /* src/layouts/DashboardLayout.css */
 .dashboard-layout {
   display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar-container {
+  /* La sidebar est visible par défaut sur grand écran */
+  flex-shrink: 0; /* Empêche la sidebar de rétrécir */
 }
 
 .content-area {
-  flex-grow: 1; /* This makes the content area take up all remaining space */
+  flex-grow: 1;
   height: 100vh;
-  overflow-y: auto; /* Adds a scrollbar if the content is taller than the screen */
+  overflow-y: auto;
+  position: relative; /* Nécessaire pour positionner le bouton hamburger */
 }
+
+.hamburger-menu {
+  display: none; /* Caché par défaut sur grand écran */
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  background: #34495e;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.main-content-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-container {
+  position: sticky;
+  top: 0;
+  z-index: 1020; /* Doit être au-dessus du contenu mais en dessous de la sidebar */
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Classe pour cacher le header en le translatant vers le haut */
+.header-container.hidden {
+  transform: translateY(-100%);
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto; /* C'est cette zone qui scrolle */
+}
+
+
+/* Pour tous les écrans d'une largeur maximale de 768px (tablettes et mobiles) */
+@media (max-width: 768px) {
+  .sidebar-container {
+    position: fixed; /* Passe par-dessus le contenu */
+    left: -300px; /* Cachée sur la gauche */
+    top: 0;
+    height: 100vh;
+    z-index: 1100;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 5px 0px 15px rgba(0,0,0,0.2);
+  }
+
+  .sidebar-container.open {
+    left: 0; /* Revient à sa position quand elle est ouverte */
+  }
+
+  .sidebar-overlay {
+  display: none; /* Caché par défaut */
+}
+
+  .sidebar-overlay {
+    display: block; /* Visible sur mobile */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Noir semi-transparent */
+    z-index: 1050; /* Doit être en dessous de la sidebar (1100) mais au-dessus du contenu */
+  }
+
+  /* Cache l'overlay quand la sidebar est fermée */
+  .sidebar-container:not(.open) + .sidebar-overlay {
+    display: none;
+  }
+
+}
+

@@ -1,6 +1,7 @@
 // src/pages/History/HistoryPage.jsx
 import React, { useState, useEffect } from "react";
 import api from "../../api/api";
+import HistoryChart from "../../components/HistoryChart/HistoryChart";
 import "./HistoryPage.css";
 
 function HistoryPage() {
@@ -59,7 +60,7 @@ function HistoryPage() {
     fetchMeasurements();
   }, [selectedSensorId]); // This effect depends on selectedSensorId.
 
-  // We create the table headers dynamically from the data!
+  // We create the table headers dynamically from the data
   const tableHeaders = [];
   if (measurements.length > 0) {
     const firstMeasurementData = measurements[0].data;
@@ -100,6 +101,12 @@ function HistoryPage() {
 
       {error && <p className="error-message">{error}</p>}
 
+      {/* --- 2. Ajouter le graphique --- */}
+      {/* On n'affiche le graphique que si on a des mesures */}
+      {!isLoadingMeasurements && measurements.length > 0 && (
+        <HistoryChart data={measurements} />
+      )}
+
       <div className="table-container">
         {isLoadingMeasurements ? (
           <p>Loading measurements...</p>
@@ -116,7 +123,9 @@ function HistoryPage() {
             <tbody>
               {measurements.map((m) => (
                 <tr key={m.id}>
-                  <td>{new Date(m.timestamp).toLocaleString()}</td>
+                  <td data-label="Timestamp">
+                    {new Date(m.createdAt).toLocaleString()}
+                  </td>
                   {uniqueHeaders.map((header) => {
                     let cellValue = "N/A";
                     // On cherche la valeur, qu'elle soit directe ou imbriquée
@@ -136,7 +145,11 @@ function HistoryPage() {
                         }
                       }
                     }
-                    return <td key={header}>{cellValue}</td>;
+                    return (
+                      <td key={header} data-label={header.replace(/_/g, " ")}>
+                        {cellValue}
+                      </td>
+                    );
                   })}
                 </tr>
               ))}

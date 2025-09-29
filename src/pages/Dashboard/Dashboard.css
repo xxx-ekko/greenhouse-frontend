@@ -8,4 +8,39 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
+  align-items: flex-start;
+}
+
+.dashboard-main h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filter-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 0.5rem 1rem;
+  border-radius: 20px; /* Pour des boutons arrondis */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background-color: #e9ecef;
+}
+
+.filter-btn.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
 }

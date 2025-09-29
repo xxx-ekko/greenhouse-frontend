@@ -6,23 +6,49 @@
   padding: 1.5rem;
   margin: 1rem;
   width: 300px;
-  text-align: center;
 }
 
 .sensor-card h3 {
+  text-align: center;
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
 
 .sensor-card p {
+  text-align: center;
   color: #666;
   margin-top: 0;
 }
 
 .gauges-container {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   margin-top: 1.5rem;
+}
+
+.sensor-group {
+  width: 100%;
+}
+
+.sensor-group h4 {
+  text-transform: uppercase;
+  text-align: center;
+  color: #999;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+/* C'est ce conteneur qui aligne les jauges horizontalement */
+.gauges-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .gauge-wrapper {
@@ -36,23 +62,21 @@
   margin-top: 0.75rem;
   font-weight: 600;
   color: #555;
-}
-
-.sensor-group {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.sensor-group h4 {
-  text-transform: uppercase;
-  color: #999;
+  text-align: center;
   font-size: 0.8rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
 }
 
 .sensor-error p {
   color: #d93025;
   font-weight: bold;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .sensor-card {
+    width: 90%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

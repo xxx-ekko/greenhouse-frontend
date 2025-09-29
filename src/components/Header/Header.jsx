@@ -3,7 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
 
-function Header() {
+// 'toggleSidebar' en prop
+function Header({ toggleSidebar }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -17,10 +18,23 @@ function Header() {
 
   return (
     <header className="app-header">
-      <div className="logo">Greenhouse Dashboard</div>
-      <button onClick={handleLogout} className="logout-button">
-        Logout
-      </button>
+      <div className="header-column header-left">
+        <button className="hamburger-menu" onClick={toggleSidebar}>
+          ☰
+        </button>
+      </div>
+
+      <div className="header-column header-center">
+        <div className="logo">
+          Le Pouls <span className="logo-highlight">Vert</span>
+        </div>
+      </div>
+
+      <div className="header-column header-right">
+        <button onClick={handleLogout} className="logout-button">
+          Logout
+        </button>
+      </div>
     </header>
   );
 }

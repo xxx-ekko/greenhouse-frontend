@@ -85,29 +85,30 @@ function SensorCard({ sensor }) {
             <div key={groupName} className="sensor-group">
               <h4>{groupName}</h4>
               {groupData.status === "ok" ? (
-                // Si le statut est OK, on boucle sur les mesures du groupe
-                Object.entries(groupData).map(([type, value]) => {
-                  if (type === "status") return null; // On n'affiche pas de jauge pour le statut
+                <div className="gauges-row">
+                  {Object.entries(groupData)
+                    .filter(([type]) => type !== "status") // On n'affiche pas de jauge pour le statut
+                    .map(([type, value]) => {
+                      const config = getConfigForType(type);
+                      const label = config.label || type.replace("_", " ");
 
-                  const config = getConfigForType(type);
-                  const label = config.label || type.replace("_", " ");
-
-                  return (
-                    <div key={type} className="gauge-wrapper">
-                      <CircularProgressbar
-                        value={value || 0}
-                        maxValue={config.maxValue}
-                        text={`${value || "N/A"}${config.unit}`}
-                        styles={buildStyles({
-                          pathColor: config.color,
-                          textColor: "#333",
-                          trailColor: "#d6d6d6",
-                        })}
-                      />
-                      <span className="gauge-label">{label}</span>
-                    </div>
-                  );
-                })
+                      return (
+                        <div key={type} className="gauge-wrapper">
+                          <CircularProgressbar
+                            value={value || 0}
+                            maxValue={config.maxValue}
+                            text={`${value || "N/A"}${config.unit}`}
+                            styles={buildStyles({
+                              pathColor: config.color,
+                              textColor: "#333",
+                              trailColor: "#d6d6d6",
+                            })}
+                          />
+                          <span className="gauge-label">{label}</span>
+                        </div>
+                      );
+                    })}
+                </div>
               ) : (
                 // Si le statut est 'error', on affiche un message d'erreur
                 <div className="sensor-error">

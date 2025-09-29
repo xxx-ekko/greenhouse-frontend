@@ -66,3 +66,171 @@
 .feedback-message.error {
   color: #d93025;
 }
+
+.separator {
+  border: none;
+  border-top: 1px solid #e9ecef;
+  margin: 3rem 0;
+}
+
+.sensors-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sensors-table th, .sensors-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sensors-table thead th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.sensors-table tbody tr:hover {
+  background-color: #f1f3f5;
+}
+
+.btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #17a2b8;
+  transition: background-color 0.2s;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+}
+.btn-info:hover {
+  background-color: #138496;
+}
+
+/* Styles pour la popup (Modal) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  outline: none;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.api-key-box {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 1rem;
+  word-wrap: break-word; /* Pour que la clé aille à la ligne si elle est trop longue */
+  font-family: monospace;
+  margin: 1.5rem 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-copy {
+  background-color: #007bff;
+}
+.btn-copy:hover {
+  background-color: #0056b3;
+}
+
+.btn-edit {
+  background-color: #ffc107; /* Jaune */
+  color: #212529;
+}
+.btn-edit:hover {
+  background-color: #e0a800;
+}
+
+.btn-primary {
+  background-color: #007bff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Pour les écrans de 768px ou moins */
+@media screen and (max-width: 768px) {
+  .sensors-table {
+    border: none;
+    box-shadow: none;
+  }
+
+  .sensors-table thead {
+    /* On cache l'en-tête du tableau, car les labels seront dans les cellules */
+    display: none;
+  }
+
+  .sensors-table tr {
+    display: block; /* Chaque ligne devient un bloc, comme une carte */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .sensors-table td {
+    display: block; /* Chaque cellule prend toute la largeur */
+    text-align: right; /* On aligne le contenu à droite */
+    border-bottom: 1px solid #eee;
+    padding-left: 50%; /* Laisse de la place pour le label */
+    position: relative;
+  }
+
+  .sensors-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* On crée un pseudo-élément qui contient le label */
+  .sensors-table td::before {
+    content: attr(data-label); /* On récupère le texte de l'attribut data-label */
+    position: absolute;
+    left: 1rem;
+    font-weight: bold;
+    text-align: left;
+  }
+}

@@ -3,9 +3,13 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 
-function Sidebar() {
+function Sidebar({ toggleSidebar }) {
   return (
     <aside className="sidebar">
+      <button className="close-btn" onClick={toggleSidebar}>
+        &times;
+      </button>
+
       <nav className="sidebar-nav">
         <NavLink
           to="/"

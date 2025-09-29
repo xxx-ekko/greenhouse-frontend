@@ -1,22 +1,22 @@
+// src/pages/Dashboard/DashboardPage.jsx
 import React, { useState, useEffect } from "react";
 import api from "../../api/api";
-import axios from "axios";
-import Header from "../../components/Header/Header";
 import SensorCard from "../../components/SensorCard/SensorCard";
-
 import "./Dashboard.css";
 
 function DashboardPage() {
+  // --- Tous les états ---
   const [sensors, setSensors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("all");
 
+  // --- Un useEffect pour récupérer les données ---
   useEffect(() => {
-    // This function runs once when the component loads
     const fetchSensors = async () => {
       try {
         setLoading(true);
-        const response = await api.get("/sensors"); // Use our API client
+        const response = await api.get("/sensors");
         setSensors(response.data);
         setError(null);
       } catch (err) {
@@ -26,45 +26,71 @@ function DashboardPage() {
         setLoading(false);
       }
     };
-
     fetchSensors();
-  }, []); // The empty array [] ensures this effect runs only once on mount
+  }, []); // Se lance une seule fois au chargement
 
-  if (loading)
-    return (
-      <>
-        <Header />
-        <p>Loading your sensors...</p>
-      </>
-    );
-  if (error)
-    return (
-      <>
-        <Header />
-        <p>{error}</p>
-      </>
-    );
+  // --- La logique de filtrage ---
+  const filteredSensors = sensors.filter((sensor) => {
+    if (activeFilter === "all") {
+      return true; // Si le filtre est 'all', on garde tous les capteurs
+    }
+    // Note: l'ID du capteur est un nombre, on le compare à la valeur du filtre
+    return sensor.id === parseInt(activeFilter);
+  });
 
-  return (
-    <div className="dashboard-container">
-      <Header />
+  // --- Les returns pour les cas de chargement et d'erreur ---
+  if (loading) {
+    return (
       <main className="dashboard-main">
-        <h1>Your Sensors</h1>
-        <div className="sensor-grid">
-          {sensors.length > 0 ? (
-            sensors.map((sensor) => (
-              <div key={sensor.id} className="">
-                {/* <h3>{sensor.name}</h3>
-                <p>{sensor.location || "No location set"}</p> */}
-                <SensorCard key={sensor.id} sensor={sensor} />
-              </div>
-            ))
-          ) : (
-            <p>You haven't added any sensors yet.</p>
-          )}
-        </div>
+        <p>Loading your sensors...</p>
       </main>
-    </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="dashboard-main">
+        <p>{error}</p>
+      </main>
+    );
+  }
+
+  // --- Le rendu final de la page ---
+  return (
+    <main className="dashboard-main">
+      <h2>Dashboard Overview</h2>
+
+      <div className="filter-bar">
+        <button
+          className={`filter-btn ${activeFilter === "all" ? "active" : ""}`}
+          onClick={() => setActiveFilter("all")}
+        >
+          All Sensors
+        </button>
+        {sensors.map((sensor) => (
+          <button
+            key={sensor.id}
+            className={`filter-btn ${
+              activeFilter === sensor.id ? "active" : ""
+            }`}
+            onClick={() => setActiveFilter(sensor.id)}
+          >
+            {sensor.name}
+          </button>
+        ))}
+      </div>
+
+      <div className="sensor-grid">
+        {/* On utilise la liste FILTRÉE pour l'affichage */}
+        {filteredSensors.length > 0 ? (
+          filteredSensors.map((sensor) => (
+            <SensorCard key={sensor.id} sensor={sensor} />
+          ))
+        ) : (
+          <p>You haven't added any sensors yet, or none match the filter.</p>
+        )}
+      </div>
+    </main>
   );
 }
 
